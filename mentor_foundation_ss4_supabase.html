@@ -1,0 +1,1782 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mentor Foundation® · GIVEHADA</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#08090b;
+  --bg2:#0d0f14;
+  --gold:#c9a84c;
+  --gold2:#e8c96a;
+  --cream:#f0ede6;
+  --muted:#6b6e7a;
+  --dim:#3a3d48;
+  --border:rgba(255,255,255,0.06);
+  --gold-border:rgba(201,168,76,0.25);
+}
+
+html{scroll-behavior:smooth;cursor:none}
+body{
+  background:var(--bg);
+  color:var(--cream);
+  font-family:'Inter',sans-serif;
+  font-size:15px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+/* CUSTOM CURSOR */
+#cursor{
+  position:fixed;
+  width:10px;height:10px;
+  background:var(--gold);
+  border-radius:50%;
+  pointer-events:none;
+  z-index:9999;
+  transition:transform 0.15s ease, opacity 0.3s;
+  transform:translate(-50%,-50%);
+}
+#cursor-ring{
+  position:fixed;
+  width:36px;height:36px;
+  border:1px solid rgba(201,168,76,0.5);
+  border-radius:50%;
+  pointer-events:none;
+  z-index:9998;
+  transition:transform 0.4s ease, width 0.3s, height 0.3s, opacity 0.3s;
+  transform:translate(-50%,-50%);
+}
+body:hover #cursor{opacity:1}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;
+  z-index:1000;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 40px;height:56px;
+  background:rgba(8,9,11,0);
+  border-bottom:1px solid transparent;
+  transition:background 0.4s, border-color 0.4s;
+}
+nav.scrolled{
+  background:rgba(8,9,11,0.94);
+  backdrop-filter:blur(16px);
+  border-bottom-color:var(--border);
+}
+.nav-logo{
+  font-family:'Cormorant Garamond',serif;
+  font-size:15px;font-weight:700;
+  letter-spacing:0.04em;
+  text-decoration:none;color:var(--cream);
+}
+.nav-logo em{color:var(--gold);font-style:normal}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{
+  text-decoration:none;color:var(--muted);
+  font-size:11px;font-weight:500;
+  letter-spacing:0.12em;text-transform:uppercase;
+  transition:color 0.2s;
+}
+.nav-links a:hover{color:var(--cream)}
+.nav-cta{
+  background:var(--gold);
+  color:#08090b;
+  font-size:10px;font-weight:700;
+  letter-spacing:0.14em;text-transform:uppercase;
+  padding:9px 20px;text-decoration:none;
+  transition:background 0.2s,transform 0.2s;
+  display:inline-block;
+}
+.nav-cta:hover{background:var(--gold2);transform:translateY(-1px)}
+
+/* TICKER */
+.ticker{
+  position:relative;
+  background:var(--gold);
+  overflow:hidden;height:38px;
+  display:flex;align-items:center;
+  margin-top:56px;
+}
+.ticker-track{
+  display:flex;gap:0;
+  animation:tickerMove 25s linear infinite;
+  white-space:nowrap;
+}
+.ticker-item{
+  display:flex;align-items:center;gap:20px;
+  padding:0 20px;
+  font-size:10px;font-weight:700;
+  letter-spacing:0.18em;text-transform:uppercase;
+  color:#08090b;flex-shrink:0;
+}
+.ticker-sep{width:5px;height:5px;background:#08090b;border-radius:50%;flex-shrink:0}
+@keyframes tickerMove{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* HERO */
+.hero{
+  min-height:100vh;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:80px 40px 60px;
+  position:relative;
+  overflow:hidden;
+}
+.hero::before{
+  content:'';
+  position:absolute;top:-200px;right:-200px;
+  width:700px;height:700px;
+  background:radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 65%);
+  pointer-events:none;
+}
+.hero-tag{
+  font-size:10px;font-weight:600;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--gold);
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:32px;
+  opacity:0;transform:translateY(20px);
+  animation:fadeUp 0.8s ease forwards 0.2s;
+}
+.hero-tag::before{content:'';width:24px;height:1px;background:var(--gold)}
+
+.hero-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(64px,10vw,140px);
+  font-weight:700;line-height:0.92;
+  letter-spacing:-0.01em;
+  margin-bottom:8px;
+  overflow:hidden;
+}
+.hero-title-line{
+  display:block;
+  opacity:0;transform:translateY(100%);
+  animation:slideUp 1s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+.hero-title-line:nth-child(1){animation-delay:0.3s}
+.hero-title-line:nth-child(2){
+  color:var(--gold);
+  font-style:italic;
+  animation-delay:0.45s;
+}
+.hero-sub{
+  display:flex;align-items:flex-start;gap:60px;
+  margin-top:48px;
+  padding-top:40px;
+  border-top:1px solid var(--border);
+  opacity:0;transform:translateY(20px);
+  animation:fadeUp 0.8s ease forwards 0.9s;
+}
+.hero-desc{
+  max-width:360px;color:var(--muted);
+  font-size:14px;line-height:1.75;
+}
+.hero-stats{
+  display:flex;gap:48px;flex-shrink:0;margin-left:auto;
+}
+.hero-stat-val{
+  font-family:'Cormorant Garamond',serif;
+  font-size:32px;font-weight:700;
+  line-height:1;color:var(--cream);
+  margin-bottom:4px;
+}
+.hero-stat-label{
+  font-size:10px;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--muted);
+}
+
+/* SCROLL INDICATOR */
+.scroll-hint{
+  position:absolute;bottom:40px;left:40px;
+  display:flex;align-items:center;gap:12px;
+  font-size:10px;letter-spacing:0.14em;
+  text-transform:uppercase;color:var(--muted);
+  opacity:0;animation:fadeUp 0.8s ease forwards 1.2s;
+}
+.scroll-line{
+  width:40px;height:1px;background:var(--muted);
+  position:relative;overflow:hidden;
+}
+.scroll-line::after{
+  content:'';position:absolute;
+  top:0;left:-100%;width:100%;height:100%;
+  background:var(--gold);
+  animation:scanLine 2s ease-in-out infinite;
+}
+@keyframes scanLine{0%{left:-100%}100%{left:100%}}
+
+/* SECTION SHARED */
+.section{
+  padding:100px 40px;
+  border-top:1px solid var(--border);
+  position:relative;overflow:hidden;
+}
+.section-label{
+  display:flex;align-items:center;gap:12px;
+  font-size:10px;font-weight:600;
+  letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:24px;
+}
+.section-label::before{content:'';width:20px;height:1px;background:var(--gold)}
+.section-num{color:var(--dim);margin-right:4px}
+
+/* REVEAL ANIMATIONS */
+.reveal{
+  opacity:0;transform:translateY(40px);
+  transition:opacity 0.8s ease, transform 0.8s cubic-bezier(0.16,1,0.3,1);
+}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:0.1s}
+.reveal-delay-2{transition-delay:0.2s}
+.reveal-delay-3{transition-delay:0.3s}
+.reveal-delay-4{transition-delay:0.4s}
+.reveal-delay-5{transition-delay:0.5s}
+
+/* BIG HEADING */
+.big-heading{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(44px,6.5vw,88px);
+  font-weight:700;line-height:0.95;
+  letter-spacing:-0.01em;
+  margin-bottom:24px;
+}
+.big-heading em{color:var(--gold);font-style:italic}
+
+/* TONG QUAN */
+.overview-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1px;background:var(--border);
+  border:1px solid var(--border);
+  margin-top:48px;
+}
+.overview-cell{
+  background:var(--bg);
+  padding:28px 32px;
+}
+.overview-cell-label{
+  font-size:9px;letter-spacing:0.16em;
+  text-transform:uppercase;color:var(--gold);
+  margin-bottom:10px;font-weight:600;
+}
+.overview-cell-value{
+  font-size:14px;color:var(--cream);
+  line-height:1.6;
+}
+.overview-cell.span2{grid-column:span 2}
+
+/* CHU DE */
+.topic-list{margin-top:48px}
+.topic-item{
+  display:grid;
+  grid-template-columns:72px 1fr 1fr;
+  gap:32px;
+  padding:32px 0;
+  border-top:1px solid var(--border);
+  align-items:start;
+  transition:background 0.3s;
+  cursor:default;
+}
+.topic-item:hover .topic-name{color:var(--gold)}
+.topic-index{
+  font-family:'Cormorant Garamond',serif;
+  font-size:48px;font-weight:700;
+  color:var(--dim);line-height:1;
+  letter-spacing:-0.04em;
+  transition:color 0.3s;
+}
+.topic-item:hover .topic-index{color:var(--gold)}
+.topic-tag{
+  font-size:9px;letter-spacing:0.14em;
+  text-transform:uppercase;color:var(--gold);
+  margin-bottom:8px;font-weight:600;
+}
+.topic-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;font-weight:700;
+  color:var(--cream);line-height:1.3;
+  transition:color 0.3s;
+}
+.topic-desc{
+  font-size:13.5px;color:var(--muted);
+  line-height:1.7;padding-top:4px;
+}
+
+/* 4 TANG */
+.tang-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1px;background:var(--border);
+  border:1px solid var(--border);
+  margin-top:40px;
+}
+.tang-card{
+  background:var(--bg2);
+  padding:28px 24px;
+  position:relative;overflow:hidden;
+  transition:background 0.3s;
+}
+.tang-card:hover{background:#12141a}
+.tang-card::before{
+  content:attr(data-num);
+  position:absolute;top:-10px;right:16px;
+  font-family:'Cormorant Garamond',serif;
+  font-size:80px;font-weight:700;
+  color:rgba(255,255,255,0.03);
+  line-height:1;pointer-events:none;
+}
+.tang-level{
+  font-size:9px;letter-spacing:0.14em;
+  text-transform:uppercase;color:var(--gold);
+  margin-bottom:12px;font-weight:600;
+}
+.tang-title-card{
+  font-family:'Cormorant Garamond',serif;
+  font-size:16px;font-weight:700;
+  color:var(--cream);margin-bottom:12px;
+}
+.tang-focus{
+  font-size:12px;color:var(--muted);
+  margin-bottom:8px;line-height:1.5;
+}
+.tang-quote{
+  font-size:12px;color:var(--gold);
+  font-style:italic;margin-bottom:12px;
+  line-height:1.5;
+}
+.tang-result{
+  font-size:12px;
+  color:rgba(201,168,76,0.7);
+  padding-top:12px;
+  border-top:1px solid var(--border);
+  line-height:1.5;
+}
+
+/* 8 CAM GIAC */
+.senses-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1px;background:var(--border);
+  border:1px solid var(--border);
+  margin-top:40px;
+}
+.sense-card{
+  background:var(--bg2);
+  padding:24px;
+  transition:background 0.25s;
+}
+.sense-card:hover{background:#12141a}
+.sense-card.highlight-card{
+  background:rgba(201,168,76,0.05);
+  border:1px solid var(--gold-border);
+}
+.sense-num{
+  font-size:11px;font-weight:700;
+  color:var(--dim);margin-bottom:10px;
+}
+.sense-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:15px;font-weight:700;
+  color:var(--cream);margin-bottom:6px;
+}
+.sense-name.g{color:var(--gold)}
+.sense-desc{font-size:12px;color:var(--muted);line-height:1.55}
+
+/* PHAN LOAI */
+.rel-table{width:100%;border-collapse:collapse;margin-top:40px}
+.rel-table thead tr{border-bottom:1px solid var(--border)}
+.rel-table th{
+  text-align:left;padding:12px 20px;
+  font-size:9px;letter-spacing:0.14em;
+  text-transform:uppercase;color:var(--dim);font-weight:600;
+}
+.rel-table td{
+  padding:20px;
+  border-bottom:1px solid var(--border);
+  font-size:13.5px;color:var(--muted);
+  vertical-align:top;
+  transition:background 0.2s;
+}
+.rel-table tr:hover td{background:rgba(255,255,255,0.02)}
+.rel-table td:first-child{
+  font-weight:700;color:var(--gold);
+  font-size:14px;
+}
+
+/* FRAMEWORK */
+.framework-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:80px;align-items:center;
+  margin-top:48px;
+}
+.golden-circle-wrap{
+  display:flex;justify-content:center;
+}
+.gc-svg{width:320px;height:320px}
+
+.legend-stack{display:flex;flex-direction:column;gap:24px}
+.legend-row{
+  display:flex;align-items:flex-start;gap:16px;
+  padding:20px;
+  border:1px solid var(--border);
+  background:var(--bg2);
+  transition:border-color 0.3s,background 0.3s;
+}
+.legend-row:hover{
+  border-color:var(--gold-border);
+  background:#12141a;
+}
+.legend-badge{
+  width:40px;height:40px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;
+  letter-spacing:0.06em;flex-shrink:0;
+}
+.badge-why{background:var(--gold);color:#08090b}
+.badge-how{background:#1e2530;color:var(--cream);border:1px solid #2e3a48}
+.badge-what{background:#14161c;color:var(--muted);border:1px solid var(--border)}
+.legend-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:14px;font-weight:700;
+  color:var(--cream);margin-bottom:4px;
+}
+.legend-title span{color:var(--gold)}
+.legend-body{font-size:12.5px;color:var(--muted);line-height:1.6}
+
+/* QUOTE HERO */
+.quote-hero{
+  padding:100px 40px;
+  background:linear-gradient(135deg,#0c0f18 0%,#080a0e 100%);
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  text-align:center;
+  position:relative;overflow:hidden;
+}
+.quote-hero::before{
+  content:'"';
+  position:absolute;top:-60px;left:50%;transform:translateX(-50%);
+  font-family:'Cormorant Garamond',serif;
+  font-size:400px;font-weight:700;
+  color:rgba(255,255,255,0.015);
+  line-height:1;pointer-events:none;
+}
+.quote-hero-text{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(28px,4vw,52px);
+  font-weight:700;line-height:1.2;
+  letter-spacing:-0.02em;
+  position:relative;z-index:1;
+  margin-bottom:20px;
+}
+.quote-hero-text em{color:var(--gold);font-style:italic}
+.quote-by{
+  font-size:11px;letter-spacing:0.16em;
+  text-transform:uppercase;color:var(--muted);
+  position:relative;z-index:1;
+}
+
+/* DUAL PANEL */
+.dual-panel{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:1px;background:var(--border);
+  border:1px solid var(--border);
+  margin-top:48px;
+}
+.panel{padding:32px}
+.panel-left{background:rgba(40,24,12,0.6)}
+.panel-right{background:rgba(12,28,16,0.6)}
+.panel-head{
+  font-size:10px;font-weight:700;
+  letter-spacing:0.14em;text-transform:uppercase;
+  margin-bottom:20px;padding-bottom:14px;
+  border-bottom:1px solid rgba(255,255,255,0.07);
+}
+.panel-left .panel-head{color:#c8834a}
+.panel-right .panel-head{color:#5caa70}
+.panel-ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.panel-ul li{
+  font-size:13px;color:var(--muted);
+  padding-left:12px;border-left:2px solid rgba(255,255,255,0.1);
+  line-height:1.55;
+}
+.panel-left .panel-ul li{border-left-color:#c8834a}
+.panel-right .panel-ul li{border-left-color:#5caa70}
+
+/* KPI */
+.kpi-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:1px;background:var(--border);
+  border:1px solid var(--border);
+  margin-top:48px;
+}
+.kpi-card{
+  background:var(--bg2);padding:32px;
+  transition:background 0.3s;
+}
+.kpi-card:hover{background:#12141a}
+.kpi-num{
+  font-family:'Cormorant Garamond',serif;
+  font-size:40px;font-weight:700;
+  color:var(--gold);line-height:1;
+  margin-bottom:8px;letter-spacing:-0.03em;
+}
+.kpi-name{
+  font-size:14px;font-weight:700;
+  color:var(--cream);margin-bottom:10px;
+}
+.kpi-desc{font-size:13px;color:var(--muted);line-height:1.65}
+
+/* BAI HOC */
+.lessons-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:1px;background:var(--border);
+  border:1px solid var(--border);
+  margin-top:48px;
+}
+.lesson-card{
+  background:var(--bg2);padding:32px;
+  position:relative;overflow:hidden;
+  transition:background 0.3s;
+  cursor:default;
+}
+.lesson-card:hover{background:#12141a}
+.lesson-card:hover .lesson-num-bg{opacity:0.06}
+.lesson-num-bg{
+  position:absolute;bottom:-20px;right:-10px;
+  font-family:'Cormorant Garamond',serif;
+  font-size:100px;font-weight:700;
+  color:var(--cream);opacity:0.025;
+  line-height:1;transition:opacity 0.3s;
+  pointer-events:none;
+}
+.lesson-n{
+  font-size:11px;font-weight:700;
+  color:var(--gold);margin-bottom:12px;
+  letter-spacing:0.1em;
+}
+.lesson-title-card{
+  font-family:'Cormorant Garamond',serif;
+  font-size:17px;font-weight:700;
+  color:var(--cream);margin-bottom:10px;
+  line-height:1.3;
+}
+.lesson-desc{
+  font-size:13px;color:var(--muted);
+  line-height:1.65;margin-bottom:12px;
+}
+.lesson-action{
+  font-size:12px;color:var(--gold);
+  border-left:2px solid var(--gold);
+  padding-left:10px;line-height:1.55;
+}
+
+/* QUOTES SECTION */
+.quotes-masonry{
+  columns:2;column-gap:1px;
+  margin-top:48px;
+}
+.quote-card{
+  break-inside:avoid;
+  background:var(--bg2);
+  border:1px solid var(--border);
+  padding:28px;margin-bottom:1px;
+  transition:border-color 0.3s,background 0.3s;
+}
+.quote-card:hover{
+  border-color:var(--gold-border);
+  background:#12141a;
+}
+.qc-num{
+  font-size:9px;letter-spacing:0.14em;
+  color:var(--dim);margin-bottom:14px;font-weight:600;
+}
+.qc-text{
+  font-family:'Cormorant Garamond',serif;
+  font-size:15px;font-weight:600;
+  color:var(--cream);line-height:1.6;
+  margin-bottom:14px;
+}
+.qc-author{
+  font-size:10px;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--muted);
+}
+
+/* FINANCE TABLE */
+.finance-rows{margin-top:40px}
+.finance-row{
+  display:grid;
+  grid-template-columns:240px 1fr;
+  gap:32px;
+  padding:24px 0;
+  border-top:1px solid var(--border);
+  align-items:start;
+  transition:background 0.2s;
+}
+.finance-row:hover{background:rgba(255,255,255,0.01);padding:24px 12px;margin:0 -12px}
+.finance-label{
+  font-size:13.5px;font-weight:700;
+  color:var(--gold);line-height:1.4;
+}
+.finance-body{font-size:13px;color:var(--muted);line-height:1.7}
+
+/* COUNT-UP */
+.count-stat{text-align:center}
+.count-val{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(48px,7vw,96px);
+  font-weight:700;color:var(--cream);
+  line-height:1;letter-spacing:-0.04em;
+}
+.count-val em{color:var(--gold);font-style:normal}
+.count-label{
+  font-size:11px;letter-spacing:0.14em;
+  text-transform:uppercase;color:var(--muted);
+  margin-top:8px;
+}
+
+/* STATS ROW */
+.stats-row{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1px;background:var(--border);
+  border:1px solid var(--border);
+  margin-top:60px;
+}
+.stat-cell{
+  background:var(--bg2);
+  padding:40px 32px;
+  text-align:center;
+}
+
+/* HORIZONTAL SCROLLER */
+.h-scroll-section{
+  overflow:hidden;padding:0;border-top:1px solid var(--border);
+}
+.h-scroll-track{
+  display:flex;gap:0;
+  animation:hScroll 40s linear infinite;
+}
+.h-scroll-item{
+  flex-shrink:0;
+  display:flex;align-items:center;gap:24px;
+  padding:0 40px;height:72px;
+  border-right:1px solid var(--border);
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(18px,2.5vw,28px);
+  font-weight:700;letter-spacing:-0.01em;
+  color:var(--dim);white-space:nowrap;
+  transition:color 0.3s;
+}
+.h-scroll-item em{color:var(--gold);font-style:normal}
+@keyframes hScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* FOOTER */
+footer{
+  padding:80px 40px 48px;
+  border-top:1px solid var(--border);
+}
+.footer-top{
+  display:flex;justify-content:space-between;
+  align-items:flex-start;margin-bottom:60px;
+}
+.footer-brand{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(32px,5vw,64px);
+  font-weight:700;letter-spacing:-0.03em;
+  line-height:1;
+}
+.footer-brand em{color:var(--gold);font-style:normal}
+.footer-sub{
+  font-size:11px;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--muted);
+  margin-top:12px;
+}
+.footer-bottom{
+  display:flex;justify-content:space-between;
+  align-items:center;
+  padding-top:28px;
+  border-top:1px solid var(--border);
+}
+.footer-copy{font-size:12px;color:var(--dim)}
+.footer-links{display:flex;gap:24px}
+.footer-links a{
+  font-size:11px;letter-spacing:0.1em;
+  text-transform:uppercase;color:var(--muted);
+  text-decoration:none;transition:color 0.2s;
+}
+.footer-links a:hover{color:var(--cream)}
+
+/* KEYFRAMES */
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+@keyframes slideUp{to{opacity:1;transform:translateY(0)}}
+
+/* ─── MOBILE ─────────────────────────────── */
+@media(max-width:768px){
+  html{cursor:auto}
+  #cursor,#cursor-ring{display:none}
+
+  /* NAV */
+  nav{padding:0 18px;height:52px}
+  .nav-links{display:none}
+  .nav-cta{font-size:10px;padding:8px 14px;letter-spacing:0.1em}
+
+  /* HERO */
+  .hero{padding:72px 18px 48px;min-height:90vh}
+  .hero-tag{font-size:10px;margin-bottom:24px}
+  .hero-title{font-size:clamp(52px,13vw,80px)}
+  .hero-sub{flex-direction:column;gap:20px;margin-top:28px;padding-top:24px}
+  .hero-stats{gap:20px;margin-left:0;flex-wrap:wrap}
+  .hero-stat-val{font-size:28px}
+  .hero-stat-label{font-size:10px}
+  .hero-desc{font-size:14px;max-width:100%;line-height:1.7}
+  .scroll-hint{left:18px;bottom:24px;font-size:9px}
+
+  /* TICKER */
+  .ticker{height:34px}
+  .ticker-item{font-size:9px;padding:0 14px;gap:14px}
+
+  /* SECTIONS */
+  .section{padding:52px 18px}
+  .section-label{font-size:10px;margin-bottom:14px;gap:8px}
+  .section-label::before{width:14px}
+
+  /* HEADINGS */
+  .big-heading{font-size:clamp(30px,9vw,44px);margin-bottom:18px;line-height:1.0}
+
+  /* OVERVIEW */
+  .overview-grid{grid-template-columns:1fr;margin-top:28px}
+  .overview-cell.span2{grid-column:span 1}
+  .overview-cell{padding:18px}
+  .overview-cell-label{font-size:9px;margin-bottom:6px}
+  .overview-cell-value{font-size:14px}
+
+  /* TOPICS */
+  .topic-list{margin-top:28px}
+  .topic-item{
+    grid-template-columns:44px 1fr;
+    gap:14px;padding:20px 0;
+  }
+  .topic-index{font-size:36px}
+  .topic-tag{font-size:9px;margin-bottom:4px}
+  .topic-name{font-size:15px}
+  .topic-desc{
+    display:block;
+    grid-column:2;
+    font-size:13px;line-height:1.6;
+    margin-top:8px;color:var(--muted);
+  }
+
+  /* 4 TẦNG */
+  .tang-grid{grid-template-columns:1fr;margin-top:24px}
+  .tang-card{padding:20px}
+  .tang-level{font-size:9px;margin-bottom:8px}
+  .tang-title-card{font-size:15px;margin-bottom:8px}
+  .tang-focus{font-size:13px}
+  .tang-quote{font-size:13px}
+  .tang-result{font-size:13px;padding-top:10px}
+
+  /* 8 GIÁC QUAN */
+  .senses-grid{grid-template-columns:1fr 1fr;margin-top:24px}
+  .sense-card{padding:16px}
+  .sense-num{font-size:10px;margin-bottom:6px}
+  .sense-name{font-size:13px;margin-bottom:4px}
+  .sense-name.g{font-size:12px}
+  .sense-desc{font-size:12px;line-height:1.5}
+
+  /* TABLE */
+  .rel-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:24px}
+  .rel-table{min-width:480px;margin-top:0}
+  .rel-table th{padding:10px 14px;font-size:9px}
+  .rel-table td{padding:14px;font-size:13px}
+
+  /* FRAMEWORK */
+  .framework-grid{grid-template-columns:1fr;gap:32px;margin-top:28px}
+  .gc-svg{width:240px;height:240px}
+  .legend-stack{gap:12px}
+  .legend-row{padding:14px;gap:12px}
+  .legend-badge{width:36px;height:36px;font-size:9px;flex-shrink:0}
+  .legend-title{font-size:13px;margin-bottom:3px}
+  .legend-body{font-size:12px;line-height:1.55}
+
+  /* QUOTE HERO */
+  .quote-hero{padding:56px 18px}
+  .quote-hero-text{font-size:clamp(20px,6vw,32px)}
+  .quote-by{font-size:10px}
+
+  /* DUAL PANEL */
+  .dual-panel{grid-template-columns:1fr;margin-top:28px}
+  .panel{padding:20px}
+  .panel-head{font-size:10px;margin-bottom:14px;padding-bottom:10px}
+  .panel-ul li{font-size:13px;line-height:1.5}
+
+  /* KPI */
+  .kpi-grid{grid-template-columns:1fr;margin-top:28px}
+  .kpi-card{padding:20px}
+  .kpi-num{font-size:32px;margin-bottom:6px}
+  .kpi-name{font-size:14px;margin-bottom:8px}
+  .kpi-desc{font-size:13px;line-height:1.6}
+
+  /* FINANCE */
+  .finance-row{grid-template-columns:1fr;gap:8px;padding:18px 0}
+  .finance-label{font-size:14px}
+  .finance-body{font-size:13px}
+
+  /* STATS */
+  .stats-row{grid-template-columns:1fr 1fr;margin-top:0}
+  .stat-cell{padding:28px 16px}
+  .count-val{font-size:clamp(44px,10vw,72px)}
+  .count-label{font-size:10px;margin-top:6px}
+
+  /* LESSONS */
+  .lessons-grid{grid-template-columns:1fr;margin-top:28px}
+  .lesson-card{padding:22px}
+  .lesson-n{font-size:10px;margin-bottom:8px}
+  .lesson-title-card{font-size:15px;margin-bottom:8px}
+  .lesson-desc{font-size:13px;line-height:1.6;margin-bottom:10px}
+  .lesson-action{font-size:12px}
+  .lesson-num-bg{font-size:80px}
+
+  /* QUOTES */
+  .quotes-masonry{columns:1;margin-top:28px}
+  .quote-card{padding:20px;margin-bottom:2px}
+  .qc-num{font-size:9px;margin-bottom:10px}
+  .qc-text{font-size:14px;margin-bottom:10px}
+  .qc-author{font-size:10px}
+
+  /* H-SCROLL */
+  .h-scroll-item{font-size:clamp(15px,4vw,20px);padding:0 20px;height:56px}
+
+  /* FOOTER */
+  footer{padding:48px 18px 32px}
+  .footer-top{flex-direction:column;gap:16px;margin-bottom:36px}
+  .footer-brand{font-size:clamp(28px,8vw,44px)}
+  .footer-sub{font-size:10px;margin-top:8px}
+  .footer-bottom{flex-direction:column;align-items:flex-start;gap:16px;padding-top:20px}
+  .footer-copy{font-size:11px}
+  .footer-links{gap:14px;flex-wrap:wrap}
+  .footer-links a{font-size:10px}
+}
+
+/* ═══ AUTH GATE ═══════════════════════════ */
+#auth-gate{
+  position:fixed;inset:0;z-index:9999;
+  background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity .6s ease, visibility .6s ease;
+}
+#auth-gate.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.auth-box{width:100%;max-width:380px;padding:0 32px;text-align:center}
+.auth-logo{
+  font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;
+  letter-spacing:0.04em;color:var(--cream);margin-bottom:8px;
+}
+.auth-logo em{color:var(--gold);font-style:italic}
+.auth-tagline{
+  font-size:10px;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:44px;
+}
+.auth-title{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:clamp(28px,6vw,36px);font-weight:600;
+  color:var(--cream);margin-bottom:36px;
+}
+.auth-field{margin-bottom:18px;text-align:left}
+.auth-field label{
+  display:block;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:8px;
+}
+.auth-field input{
+  width:100%;padding:13px 16px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border);
+  color:var(--cream);font-family:'Inter',sans-serif;font-size:14px;
+  outline:none;transition:border-color .3s;cursor:auto;
+}
+.auth-field input:focus{border-color:var(--gold-border)}
+.auth-submit{
+  width:100%;margin-top:10px;padding:14px;
+  background:var(--gold);color:var(--bg);
+  border:none;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;
+  letter-spacing:0.14em;text-transform:uppercase;
+  cursor:pointer;transition:background .3s;
+}
+.auth-submit:hover{background:var(--gold2)}
+.auth-error{margin-top:16px;font-size:12px;color:#c8834a;min-height:16px}
+
+
+.auth-toggle{margin-top:24px;font-size:12px;color:var(--muted)}
+.auth-toggle a{color:var(--gold);text-decoration:none;margin-left:6px;border-bottom:1px solid var(--gold-border)}
+.auth-toggle a:hover{color:var(--gold2)}
+.auth-loading{
+  position:fixed;inset:0;z-index:9998;background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Inter',sans-serif;font-size:11px;letter-spacing:0.15em;
+  text-transform:uppercase;color:var(--muted);
+}
+.auth-logout{
+  font-family:'Inter',sans-serif;font-size:10px;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--muted);text-decoration:none;
+  cursor:pointer;border:1px solid var(--border);padding:8px 14px;
+  transition:color .3s,border-color .3s;
+}
+.auth-logout:hover{color:var(--gold);border-color:var(--gold-border)}
+
+</style>
+</head>
+<body>
+<div id="auth-gate">
+  <div class="auth-box">
+    <div class="auth-logo">GIVE<em>HADA</em></div>
+    <div class="auth-tagline">Tài Liệu Nội Bộ · 2026</div>
+    <div class="auth-title" id="auth-mode-title">Đăng Nhập</div>
+    <form id="auth-form" autocomplete="off">
+      <div class="auth-field">
+        <label>Email</label>
+        <input type="email" id="auth-email" autocomplete="off" required>
+      </div>
+      <div class="auth-field">
+        <label>Mật Khẩu</label>
+        <input type="password" id="auth-pass" autocomplete="off" required minlength="6">
+      </div>
+      <button type="submit" class="auth-submit" id="auth-submit-btn">Đăng Nhập</button>
+      <div class="auth-error" id="auth-error"></div>
+    </form>
+    <div class="auth-toggle">
+      <span id="auth-toggle-text">Chưa có tài khoản?</span><a href="#" id="auth-toggle-link">Đăng Ký</a>
+    </div>
+  </div>
+</div>
+<div class="auth-loading" id="auth-loading">Đang Kiểm Tra Phiên Đăng Nhập...</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+  // ─── CẤU HÌNH SUPABASE ─────────────────────────────
+  // Thay 2 giá trị dưới bằng URL và anon key của dự án Supabase của bạn.
+  // Lấy tại: Supabase Dashboard > Project Settings > API
+  var SUPABASE_URL = 'https://YOUR-PROJECT.supabase.co';
+  var SUPABASE_ANON_KEY = 'YOUR-ANON-PUBLIC-KEY';
+
+  var gate     = document.getElementById('auth-gate');
+  var loading  = document.getElementById('auth-loading');
+  var form     = document.getElementById('auth-form');
+  var err      = document.getElementById('auth-error');
+  var emailEl  = document.getElementById('auth-email');
+  var passEl   = document.getElementById('auth-pass');
+  var submitBtn= document.getElementById('auth-submit-btn');
+  var modeTitle= document.getElementById('auth-mode-title');
+  var toggleTxt= document.getElementById('auth-toggle-text');
+  var toggleLnk= document.getElementById('auth-toggle-link');
+  var mode = 'login';
+
+  if(SUPABASE_URL.indexOf('YOUR-PROJECT') > -1){
+    loading.innerHTML = 'Chưa cấu hình Supabase.<br><br>Điền SUPABASE_URL và SUPABASE_ANON_KEY trong file HTML.';
+    loading.style.flexDirection='column';loading.style.gap='8px';loading.style.textAlign='center';loading.style.padding='40px';
+    return;
+  }
+
+  var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  window.__sb = sb; // cho phép gọi đăng xuất từ bên ngoài nếu cần
+
+  function showApp(){
+    loading.style.display='none';
+    gate.classList.add('hidden');
+    document.body.style.overflow='';
+  }
+  function showGate(){
+    loading.style.display='none';
+    gate.classList.remove('hidden');
+    document.body.style.overflow='hidden';
+  }
+
+  sb.auth.getSession().then(function(res){
+    if(res.data.session){ showApp(); } else { showGate(); }
+  });
+
+  sb.auth.onAuthStateChange(function(event, session){
+    if(session){ showApp(); } else { showGate(); }
+  });
+
+  toggleLnk.addEventListener('click', function(e){
+    e.preventDefault();
+    err.textContent='';
+    if(mode==='login'){
+      mode='signup';
+      modeTitle.textContent='Đăng Ký';
+      submitBtn.textContent='Tạo Tài Khoản';
+      toggleTxt.textContent='Đã có tài khoản?';
+      toggleLnk.textContent='Đăng Nhập';
+    } else {
+      mode='login';
+      modeTitle.textContent='Đăng Nhập';
+      submitBtn.textContent='Đăng Nhập';
+      toggleTxt.textContent='Chưa có tài khoản?';
+      toggleLnk.textContent='Đăng Ký';
+    }
+  });
+
+  function translateError(msg){
+    if(msg.indexOf('Invalid login credentials')>-1) return 'Sai email hoặc mật khẩu.';
+    if(msg.indexOf('already registered')>-1 || msg.indexOf('already exists')>-1) return 'Email đã được đăng ký.';
+    if(msg.indexOf('Password should be')>-1) return 'Mật khẩu cần ít nhất 6 ký tự.';
+    if(msg.indexOf('rate limit')>-1) return 'Thử lại sau ít phút.';
+    return msg;
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    err.style.color='#c8834a';
+    err.textContent='';
+    submitBtn.disabled=true;
+    submitBtn.textContent='Đang Xử Lý...';
+
+    var email = emailEl.value.trim();
+    var pass  = passEl.value;
+    var action = mode==='login'
+      ? sb.auth.signInWithPassword({ email: email, password: pass })
+      : sb.auth.signUp({ email: email, password: pass });
+
+    action.then(function(res){
+      submitBtn.disabled=false;
+      submitBtn.textContent = mode==='login' ? 'Đăng Nhập' : 'Tạo Tài Khoản';
+      if(res.error){
+        err.textContent = translateError(res.error.message);
+      } else if(mode==='signup' && !res.data.session){
+        err.style.color='var(--gold)';
+        err.textContent='Kiểm tra email để xác nhận tài khoản trước khi đăng nhập.';
+      }
+    });
+  });
+
+  // Hàm đăng xuất, gắn vào nút .auth-logout nếu có trên trang
+  document.querySelectorAll('.auth-logout').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.preventDefault();
+      sb.auth.signOut();
+    });
+  });
+})();
+</script>
+
+
+<!-- CUSTOM CURSOR -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">GIVE<em>HADA</em></a>
+  <ul class="nav-links">
+    <li><a href="#tong-quan">Tổng Quan</a></li>
+    <li><a href="#chu-de">Chủ Đề</a></li>
+    <li><a href="#framework">Framework</a></li>
+    <li><a href="#bai-hoc">Bài Học</a></li>
+    <li><a href="#cau-noi">Câu Nói</a></li>
+  </ul>
+  <a href="#" class="nav-cta">Tài Liệu Nội Bộ</a>
+  <a href="#" class="auth-logout">Đăng Xuất</a>
+</nav>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <div class="ticker-item"><span class="ticker-sep"></span>PHARMESTHETIC</div>
+    <div class="ticker-item"><span class="ticker-sep"></span>NOBLESSE OBLIGE</div>
+    <div class="ticker-item"><span class="ticker-sep"></span>NHẬN THỨC LÀ TÀI SẢN</div>
+    <div class="ticker-item"><span class="ticker-sep"></span>STRATEGY BEFORE PIXELS</div>
+    <div class="ticker-item"><span class="ticker-sep"></span>MENTOR FOUNDATION V1.0</div>
+    <div class="ticker-item"><span class="ticker-sep"></span>GIVEHADA × H2Y JSC</div>
+    <div class="ticker-item"><span class="ticker-sep"></span>PHARMESTHETIC</div>
+    <div class="ticker-item"><span class="ticker-sep"></span>NOBLESSE OBLIGE</div>
+    <div class="ticker-item"><span class="ticker-sep"></span>NHẬN THỨC LÀ TÀI SẢN</div>
+    <div class="ticker-item"><span class="ticker-sep"></span>STRATEGY BEFORE PIXELS</div>
+    <div class="ticker-item"><span class="ticker-sep"></span>MENTOR FOUNDATION V1.0</div>
+    <div class="ticker-item"><span class="ticker-sep"></span>GIVEHADA × H2Y JSC</div>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-tag">Biên Bản Tổng Hợp Buổi Học</div>
+  <h1 class="hero-title">
+    <span class="hero-title-line">Mentor</span>
+    <span class="hero-title-line">Foundation.</span>
+  </h1>
+  <div class="hero-sub">
+    <p class="hero-desc">Nhận thức · Tư duy · Quản trị bản thân. Một buổi học: sáu phần, mười bài, mười câu nói.</p>
+    <div class="hero-stats">
+      <div class="count-stat">
+        <div class="hero-stat-val">6</div>
+        <div class="hero-stat-label">Phần</div>
+      </div>
+      <div class="count-stat">
+        <div class="hero-stat-val">10</div>
+        <div class="hero-stat-label">Bài Học</div>
+      </div>
+      <div class="count-stat">
+        <div class="hero-stat-val">10</div>
+        <div class="hero-stat-label">Câu Nói</div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    Cuộn để khám phá
+  </div>
+</section>
+
+<!-- HORIZONTAL SCROLL MARQUEE -->
+<div class="h-scroll-section">
+  <div class="h-scroll-track">
+    <div class="h-scroll-item">TƯ DUY <em>KINH DOANH</em></div>
+    <div class="h-scroll-item">NHẬN THỨC <em>TÀI SẢN</em></div>
+    <div class="h-scroll-item">QUẢN TRỊ <em>BẢN THÂN</em></div>
+    <div class="h-scroll-item">LÃNH ĐẠO <em>CHIỀU SÂU</em></div>
+    <div class="h-scroll-item">WHY <em>HOW</em> WHAT</div>
+    <div class="h-scroll-item">GOLDEN <em>CIRCLE</em></div>
+    <div class="h-scroll-item">TƯ DUY <em>KINH DOANH</em></div>
+    <div class="h-scroll-item">NHẬN THỨC <em>TÀI SẢN</em></div>
+    <div class="h-scroll-item">QUẢN TRỊ <em>BẢN THÂN</em></div>
+    <div class="h-scroll-item">LÃNH ĐẠO <em>CHIỀU SÂU</em></div>
+    <div class="h-scroll-item">WHY <em>HOW</em> WHAT</div>
+    <div class="h-scroll-item">GOLDEN <em>CIRCLE</em></div>
+  </div>
+</div>
+
+<!-- TONG QUAN -->
+<section class="section" id="tong-quan">
+  <div class="section-label"><span class="section-num">01</span> Tổng Quan Buổi Học</div>
+  <h2 class="big-heading reveal">Tổng quan<br><em>buổi học</em></h2>
+  <div class="overview-grid reveal reveal-delay-2">
+    <div class="overview-cell">
+      <div class="overview-cell-label">Người Dẫn Chương Trình</div>
+      <div class="overview-cell-value">Hoang Hai Yen (Chị Yến)</div>
+    </div>
+    <div class="overview-cell">
+      <div class="overview-cell-label">Tổ Chức</div>
+      <div class="overview-cell-value">GIVEHADA / H2Y International JSC</div>
+    </div>
+    <div class="overview-cell span2">
+      <div class="overview-cell-label">Thành Viên Tham Dự</div>
+      <div class="overview-cell-value">Khương Nguyễn · Tú Trần · Xuân Trần · Song Song · Huyền Lê Thanh · Dieulinh Le · Toàn Nguyễn · Pharmes Ngo Mai Phuong · Ms. Bông</div>
+    </div>
+    <div class="overview-cell">
+      <div class="overview-cell-label">Chương Trình</div>
+      <div class="overview-cell-value">Tư Duy &amp; Lãnh Đạo</div>
+    </div>
+    <div class="overview-cell">
+      <div class="overview-cell-label">Nội Dung</div>
+      <div class="overview-cell-value">6 Phần · 10 Bài Học · 10 Câu Nói</div>
+    </div>
+    <div class="overview-cell">
+      <div class="overview-cell-label">Video Tham Khảo</div>
+      <div class="overview-cell-value">Simon Sinek, "The Golden Circle" (4 phút đầu / 17 phút)</div>
+    </div>
+    <div class="overview-cell">
+      <div class="overview-cell-label">Ghi Chú</div>
+      <div class="overview-cell-value">Một số thành viên không bật camera hoặc vào muộn, cần cải thiện.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CHU DE CHINH -->
+<section class="section" id="chu-de">
+  <div class="section-label"><span class="section-num">02</span> Các Chủ Đề Chính</div>
+  <h2 class="big-heading reveal">Sáu chủ đề<br><em>cốt lõi</em></h2>
+  <p class="reveal reveal-delay-1" style="color:var(--muted);font-size:14px;max-width:500px;margin-top:8px">Từ xu hướng vĩ mô đến quản trị nhận thức cá nhân.</p>
+  <div class="topic-list">
+    <div class="topic-item reveal">
+      <div class="topic-index">01</div>
+      <div>
+        <div class="topic-tag">Xu Thế Toàn Cầu</div>
+        <div class="topic-name">Năng lực bắt buộc của thời đại</div>
+      </div>
+      <div class="topic-desc">Samsung, LG, SK đều dịch chuyển sang AI. 2029–2030: nhiều vị trí quản lý cấp trung biến mất. Không phải người bị đào thải, mà là phương pháp cũ.</div>
+    </div>
+    <div class="topic-item reveal reveal-delay-1">
+      <div class="topic-index">02</div>
+      <div>
+        <div class="topic-tag">Cam Kết</div>
+        <div class="topic-name">Chất lượng lời hứa</div>
+      </div>
+      <div class="topic-desc">Niềm tin xây từ những điều nhỏ. Khi chưa thực hiện được: hành động mới, đừng im lặng.</div>
+    </div>
+    <div class="topic-item reveal reveal-delay-2">
+      <div class="topic-index">03</div>
+      <div>
+        <div class="topic-tag">Ngôn Thức</div>
+        <div class="topic-name">Nền tảng của mọi thay đổi</div>
+      </div>
+      <div class="topic-desc">Khi ngôn ngữ thay đổi → tư duy thay đổi → cơ hội thay đổi. Cuộc đời thay đổi từ bên trong trước.</div>
+    </div>
+    <div class="topic-item reveal reveal-delay-3">
+      <div class="topic-index">04</div>
+      <div>
+        <div class="topic-tag">5 Giác Quan</div>
+        <div class="topic-name">Con người nhiều hơn 5 giác quan</div>
+      </div>
+      <div class="topic-desc">Ngoài 5 giác quan, con người còn có: cảm nhận vị trí cơ thể, thăng bằng, và nội tâm, hệ thứ 8 học nghiệm sâu sắc nhất.</div>
+    </div>
+    <div class="topic-item reveal reveal-delay-4">
+      <div class="topic-index">05</div>
+      <div>
+        <div class="topic-tag">Mối Quan Hệ</div>
+        <div class="topic-name">Quản lý có chủ đích</div>
+      </div>
+      <div class="topic-desc">Không phải mọi quan hệ đều cần giữ. Buông không phải vô tình, mà là trân trọng hành trình trưởng thành của nhau.</div>
+    </div>
+    <div class="topic-item reveal reveal-delay-5">
+      <div class="topic-index">06</div>
+      <div>
+        <div class="topic-tag">Lãnh Đạo</div>
+        <div class="topic-name">Quyết định khó</div>
+      </div>
+      <div class="topic-desc">Trưởng thành là giữ bình tĩnh để đưa ra quyết định đúng, kể cả khi bản thân không hài lòng với quyết định đó.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 TANG NHAN THUC -->
+<section class="section" style="background:var(--bg2)">
+  <div class="section-label"><span class="section-num">02A</span> Khung Nhận Thức</div>
+  <h2 class="big-heading reveal">4 Tầng<br><em>Nhận Thức</em></h2>
+  <p class="reveal reveal-delay-1" style="color:var(--muted);font-size:14px;max-width:480px;margin-top:8px">Bề Mặt · Nguyên Nhân · Hoàn Cảnh · Bản Chất</p>
+  <div class="tang-grid reveal reveal-delay-2">
+    <div class="tang-card" data-num="01">
+      <div class="tang-level">Tầng 01</div>
+      <div class="tang-title-card">Bề Mặt</div>
+      <div class="tang-focus">Chỉ thấy đúng ra nó</div>
+      <div class="tang-quote">"Người này sai. Người kia đúng."</div>
+      <div class="tang-result">Phản xạ lợi hại, phản ứng theo cảm xúc</div>
+    </div>
+    <div class="tang-card" data-num="02">
+      <div class="tang-level">Tầng 02</div>
+      <div class="tang-title-card">Nguyên Nhân</div>
+      <div class="tang-focus">Thấy lý do đằng sau hành động</div>
+      <div class="tang-quote">"Tại sao họ làm vậy?"</div>
+      <div class="tang-result">Hiểu người hơn, giảm phán xét</div>
+    </div>
+    <div class="tang-card" data-num="03">
+      <div class="tang-level">Tầng 03</div>
+      <div class="tang-title-card">Hoàn Cảnh</div>
+      <div class="tang-focus">Thấy bối cảnh tạo ra hành động</div>
+      <div class="tang-quote">"Hoàn cảnh họ như thế nào?"</div>
+      <div class="tang-result">Quyết định công bằng, có chiều sâu</div>
+    </div>
+    <div class="tang-card" data-num="04">
+      <div class="tang-level">Tầng 04</div>
+      <div class="tang-title-card">Bản Chất</div>
+      <div class="tang-focus">Thấy quy luật ẩn bên dưới</div>
+      <div class="tang-quote">"Điều gì thực sự đang xảy ra?"</div>
+      <div class="tang-result">Quyết định đúng, kể cả trong áp lực</div>
+    </div>
+  </div>
+
+  <!-- 8 CAM GIAC -->
+  <div style="margin-top:72px">
+    <div class="section-label"><span class="section-num">02B</span> Hệ Giác Quan</div>
+    <h3 class="big-heading reveal" style="font-size:clamp(28px,4vw,52px)">8 Hệ Cảm Giác<br><em>Của Con Người</em></h3>
+    <div class="senses-grid reveal reveal-delay-2">
+      <div class="sense-card">
+        <div class="sense-num">01</div>
+        <div class="sense-name">Thị giác</div>
+        <div class="sense-desc">Nhìn, quan sát thế giới xung quanh</div>
+      </div>
+      <div class="sense-card">
+        <div class="sense-num">02</div>
+        <div class="sense-name">Thính giác</div>
+        <div class="sense-desc">Nghe âm thanh, giọng nói, nhịp điệu</div>
+      </div>
+      <div class="sense-card">
+        <div class="sense-num">03</div>
+        <div class="sense-name">Khứu giác</div>
+        <div class="sense-desc">Ngửi mùi, kích hoạt ký ức sâu nhất</div>
+      </div>
+      <div class="sense-card">
+        <div class="sense-num">04</div>
+        <div class="sense-name">Vị giác</div>
+        <div class="sense-desc">Nếm vị, phân biệt an toàn và nguy hiểm</div>
+      </div>
+      <div class="sense-card">
+        <div class="sense-num">05</div>
+        <div class="sense-name">Xúc giác</div>
+        <div class="sense-desc">Cảm nhận tiếp xúc bên ngoài da</div>
+      </div>
+      <div class="sense-card highlight-card">
+        <div class="sense-num">06</div>
+        <div class="sense-name g">Proprioception</div>
+        <div class="sense-desc">Vị trí cơ thể trong không gian, biết mình đang ở tư thế nào</div>
+      </div>
+      <div class="sense-card highlight-card">
+        <div class="sense-num">07</div>
+        <div class="sense-name g">Vestibular</div>
+        <div class="sense-desc">Thăng bằng &amp; chuyển động, nằm trong tai trong</div>
+      </div>
+      <div class="sense-card highlight-card">
+        <div class="sense-num">08</div>
+        <div class="sense-name g">Interoception</div>
+        <div class="sense-desc">Cảm nhận nội tâm, đói/no, căng thẳng/thư giãn. Nghiệm sâu sắc nhất.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHAN LOAI QUAN HE -->
+  <div style="margin-top:72px">
+    <div class="section-label"><span class="section-num">02C</span> Phân Loại Quan Hệ</div>
+    <h3 class="big-heading reveal" style="font-size:clamp(28px,4vw,52px)">Phân loại<br><em>mối quan hệ</em></h3>
+    <div class="rel-table-wrap">
+    <table class="rel-table reveal reveal-delay-2">
+      <thead>
+        <tr>
+          <th>Phân Loại</th>
+          <th>Đặc Điểm</th>
+          <th>Hành Động Phù Hợp</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Cần nuôi dưỡng</td>
+          <td>Cả hai cùng phát triển, tiếp năng lượng cho nhau</td>
+          <td>Chủ động hẹn định kỳ, 1 lần/năm đủ duy trì</td>
+        </tr>
+        <tr>
+          <td>Để yên</td>
+          <td>Không còn giúp nhau, chỉ vì tiếc mà giữ</td>
+          <td>Nhận diện rõ, buông nhẹ nhàng</td>
+        </tr>
+        <tr>
+          <td>Độc hại</td>
+          <td>Mất năng lượng, kéo lùi nhận thức</td>
+          <td>Cắt bỏ quyết đoán, bảo vệ cả hai</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</section>
+
+<!-- FRAMEWORK -->
+<section class="section" id="framework">
+  <div class="section-label"><span class="section-num">03</span> Framework &amp; Mô Hình</div>
+  <h2 class="big-heading reveal">Vòng Tròn Vàng<br><em>The Golden Circle</em></h2>
+  <div class="framework-grid">
+    <div class="golden-circle-wrap reveal reveal-delay-1">
+      <svg class="gc-svg" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+            <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <!-- WHAT: vòng ngoài -->
+        <circle cx="160" cy="160" r="148" fill="#10121a" stroke="#2a2d38" stroke-width="1"/>
+        <text x="160" y="30" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="10" font-weight="700" fill="#3a3d48" letter-spacing="3">WHAT</text>
+        <text x="160" y="298" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="10" font-weight="700" fill="#3a3d48" letter-spacing="3">WHAT</text>
+        <text x="20" y="165" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="10" font-weight="700" fill="#3a3d48" letter-spacing="2" transform="rotate(-90 20 165)">WHAT</text>
+        <text x="300" y="165" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="10" font-weight="700" fill="#3a3d48" letter-spacing="2" transform="rotate(90 300 165)">WHAT</text>
+
+        <!-- HOW: vòng giữa -->
+        <circle cx="160" cy="160" r="106" fill="#13161f" stroke="#273040" stroke-width="1"/>
+        <text x="160" y="68" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="9" font-weight="700" fill="#4a6880" letter-spacing="3">HOW</text>
+        <text x="160" y="258" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="9" font-weight="700" fill="#4a6880" letter-spacing="3">HOW</text>
+
+        <!-- WHY: vòng trong cùng -->
+        <circle cx="160" cy="160" r="62" fill="#c9a84c" filter="url(#glow)"/>
+        <circle cx="160" cy="160" r="62" fill="url(#goldGrad)"/>
+        <defs>
+          <radialGradient id="goldGrad" cx="40%" cy="35%">
+            <stop offset="0%" stop-color="#e8c96a"/>
+            <stop offset="100%" stop-color="#a8842a"/>
+          </radialGradient>
+        </defs>
+        <text x="160" y="154" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="16" font-weight="700" fill="#08090b" letter-spacing="2">WHY</text>
+        <text x="160" y="172" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="9" font-weight="600" fill="rgba(8,9,11,0.55)" letter-spacing="2">TẠI SAO</text>
+      </svg>
+    </div>
+    <div class="legend-stack reveal reveal-delay-2">
+      <div class="legend-row">
+        <div class="legend-badge badge-why">WHY</div>
+        <div>
+          <div class="legend-title"><span>WHY</span>: Tại Sao</div>
+          <div class="legend-body">Lý do tồn tại. Niềm tin. Mục đích sâu xa. Apple không bắt đầu bằng sản phẩm, họ bắt đầu bằng niềm tin vào đổi mới.</div>
+        </div>
+      </div>
+      <div class="legend-row">
+        <div class="legend-badge badge-how">HOW</div>
+        <div>
+          <div class="legend-title">HOW: Như Thế Nào</div>
+          <div class="legend-body">Cách thực hiện niềm tin. Quy trình, điểm khác biệt vận hành, hiện thực hóa WHY.</div>
+        </div>
+      </div>
+      <div class="legend-row">
+        <div class="legend-badge badge-what">WHAT</div>
+        <div>
+          <div class="legend-title">WHAT: Cái Gì</div>
+          <div class="legend-body">Sản phẩm / dịch vụ cụ thể. Đây là thứ mọi người nhìn thấy, nhưng không phải lý do họ mua.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE HERO -->
+<div class="quote-hero">
+  <div class="quote-hero-text reveal">"People don't buy <em>what</em> you do.<br>They buy <em>why</em> you do it."</div>
+  <div class="quote-by reveal reveal-delay-2">Simon Sinek</div>
+</div>
+
+<!-- QUAN TRI -->
+<section class="section" style="background:var(--bg2)">
+  <div class="section-label"><span class="section-num">03A</span> Quản Trị Dữ Liệu</div>
+  <h2 class="big-heading reveal">Dữ Liệu<br><em>vs Cảm Xúc</em></h2>
+  <div class="dual-panel reveal reveal-delay-2">
+    <div class="panel panel-left">
+      <div class="panel-head">Quản Trị Bằng Cảm Xúc</div>
+      <ul class="panel-ul">
+        <li>"Hình như ổn..." "Có vẻ tốt..."</li>
+        <li>"Cảm giác khách đông hơn..."</li>
+        <li>Doanh thu tăng nhưng không biết so với gì</li>
+        <li>Đợi đến cuối tháng mới mở báo cáo</li>
+        <li>Chi phí tăng nhưng không biết phục vụ mục tiêu nào</li>
+      </ul>
+    </div>
+    <div class="panel panel-right">
+      <div class="panel-head">Quản Trị Bằng Dữ Liệu</div>
+      <ul class="panel-ul">
+        <li>Biết tỷ lệ hoàn thành mục tiêu (%) mọi lúc</li>
+        <li>Phân biệt rõ: tăng so với năm ngoái hay so với kế hoạch?</li>
+        <li>Kiểm tra số liệu sức khỏe định kỳ</li>
+        <li>Dòng tiền, lợi nhuận, tỷ lệ khách hàng quay lại</li>
+        <li>Tháng 7: rà soát toàn bộ 6 tháng đầu năm</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 4 CHI SO -->
+  <div style="margin-top:72px">
+    <div class="section-label"><span class="section-num">03B</span> 4 Chỉ Số Cốt Lõi</div>
+    <h3 class="big-heading reveal" style="font-size:clamp(28px,4vw,52px)">4 Chỉ số bắt<br><em>buộc thuộc lòng</em></h3>
+    <div class="kpi-grid reveal reveal-delay-2">
+      <div class="kpi-card">
+        <div class="kpi-num">01</div>
+        <div class="kpi-name">Doanh thu &amp; Lợi nhuận</div>
+        <div class="kpi-desc">Hỏi "tăng so với kế hoạch hay năm ngoái?" chứ không phải "tăng bao nhiêu?" Doanh thu tăng chưa chắc lợi nhuận tăng.</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-num">02</div>
+        <div class="kpi-name">Tỷ lệ khách hàng quay lại</div>
+        <div class="kpi-desc">Đo lường chất lượng trải nghiệm thực sự. Khách mới nhiều không quan trọng bằng khách cũ có quay lại không.</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-num">03</div>
+        <div class="kpi-name">Giá trị trung bình / khách</div>
+        <div class="kpi-desc">50 khách × 400.000đ = 100 khách × 200.000đ. Cùng doanh thu 20 triệu nhưng năng lượng bỏ ra giảm một nửa.</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-num">04</div>
+        <div class="kpi-name">Tỷ lệ hoàn thành mục tiêu (%)</div>
+        <div class="kpi-desc">Phải biết ngay, không cần mở máy tính. "Tôi đã hoàn thành bao nhiêu % kế hoạch năm?"</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NGUON TAI CHINH -->
+  <div style="margin-top:72px">
+    <div class="section-label"><span class="section-num">03C</span> Tư Duy Tài Chính</div>
+    <h3 class="big-heading reveal" style="font-size:clamp(28px,4vw,52px)">Nguồn tài chính<br><em>doanh nghiệp</em></h3>
+    <div class="finance-rows reveal reveal-delay-2">
+      <div class="finance-row">
+        <div class="finance-label">Tiền vào đều tạo ảo giác an toàn</div>
+        <div class="finance-body">Chi tiêu theo cảm xúc khi thấy tiền chạy đều; đây là cách nhiều doanh nghiệp suy yếu dần. Kiểm soát dòng tiền ra vào mới là chìa khóa.</div>
+      </div>
+      <div class="finance-row">
+        <div class="finance-label">Lòng tốt không có nguyên tắc = tự hại</div>
+        <div class="finance-body">Giảm giá theo cảm xúc, nhường bộ không có cơ sở, những bẫy phổ biến nhất người lãnh đạo hay mắc.</div>
+      </div>
+      <div class="finance-row">
+        <div class="finance-label">Kinh doanh có thứ tự</div>
+        <div class="finance-body">Thu hút → Tối ưu → Chọn lọc. Chưa có khách mà đã muốn chọn khách là tự đóng cửa sớm.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS ROW -->
+<div class="stats-row">
+  <div class="stat-cell reveal">
+    <div class="count-val" data-target="10">0</div>
+    <div class="count-label">Bài Học Cốt Lõi</div>
+  </div>
+  <div class="stat-cell reveal reveal-delay-2">
+    <div class="count-val" data-target="8">0</div>
+    <div class="count-label">Hệ Cảm Giác Con Người</div>
+  </div>
+  <div class="stat-cell reveal reveal-delay-4">
+    <div class="count-val" data-target="4">0</div>
+    <div class="count-label">Tầng Nhận Thức</div>
+  </div>
+</div>
+
+<!-- BAI HOC -->
+<section class="section" id="bai-hoc">
+  <div class="section-label"><span class="section-num">04</span> Bài Học Cốt Lõi</div>
+  <h2 class="big-heading reveal">Mười bài học<br><em>cốt lõi</em></h2>
+  <p class="reveal reveal-delay-1" style="color:var(--muted);font-size:14px;max-width:480px;margin-top:8px">Mỗi bài đi kèm một hành động ứng dụng đúng ngay hôm nay.</p>
+  <div class="lessons-grid">
+    <div class="lesson-card reveal">
+      <div class="lesson-num-bg">1</div>
+      <div class="lesson-n">01 / 10</div>
+      <div class="lesson-title-card">Tự phát triển</div>
+      <div class="lesson-desc">Thế giới không đào thải người có năng lực. Nó chỉ đào thải cách làm lỗi thời.</div>
+      <div class="lesson-action">Liên tục cập nhật phương pháp, không chỉ kiến thức.</div>
+    </div>
+    <div class="lesson-card reveal reveal-delay-1">
+      <div class="lesson-num-bg">2</div>
+      <div class="lesson-n">02 / 10</div>
+      <div class="lesson-title-card">Chiều sâu tư duy</div>
+      <div class="lesson-desc">Khoảng cách giữa người với người không ở lượng kiến thức, mà ở chiều sâu tư duy về cùng một sự việc.</div>
+      <div class="lesson-action">Học để đi sâu hơn, không chỉ để biết nhiều hơn.</div>
+    </div>
+    <div class="lesson-card reveal reveal-delay-2">
+      <div class="lesson-num-bg">3</div>
+      <div class="lesson-n">03 / 10</div>
+      <div class="lesson-title-card">Sức mạnh ngôn ngữ</div>
+      <div class="lesson-desc">Ngôn ngữ → tư duy → cách nhìn → cơ hội. Học một ngôn ngữ mới là học một cách nhìn thế giới mới.</div>
+      <div class="lesson-action">Mỗi ngôn ngữ mới mở thêm một góc nhìn.</div>
+    </div>
+    <div class="lesson-card reveal reveal-delay-3">
+      <div class="lesson-num-bg">4</div>
+      <div class="lesson-n">04 / 10</div>
+      <div class="lesson-title-card">Giới hạn thực sự</div>
+      <div class="lesson-desc">Nhiều giới hạn không phải giới hạn năng lực, mà là giới hạn nhận thức. Hoàn cảnh thay đổi, người phát hiện mình mạnh hơn nhiều.</div>
+      <div class="lesson-action">Hỏi: "Tôi có thể làm thêm gì?"</div>
+    </div>
+    <div class="lesson-card reveal">
+      <div class="lesson-num-bg">5</div>
+      <div class="lesson-n">05 / 10</div>
+      <div class="lesson-title-card">Mục tiêu đo được</div>
+      <div class="lesson-desc">Mục tiêu đo được không phải "muốn tốt hơn", mà là "tỷ lệ hoàn thành hiện tại là bao nhiêu %?"</div>
+      <div class="lesson-action">Bắt con số cụ thể, theo dõi hàng tuần.</div>
+    </div>
+    <div class="lesson-card reveal reveal-delay-1">
+      <div class="lesson-num-bg">6</div>
+      <div class="lesson-n">06 / 10</div>
+      <div class="lesson-title-card">Lý tưởng sống</div>
+      <div class="lesson-desc">WHY là la bàn khi cuộc đời khó. Tiền thúc bắt đầu, nhưng hiếm khi đủ cho cả hành trình.</div>
+      <div class="lesson-action">Viết ra lý do bạn muốn làm việc này trong cuộc đời.</div>
+    </div>
+    <div class="lesson-card reveal reveal-delay-2">
+      <div class="lesson-num-bg">7</div>
+      <div class="lesson-n">07 / 10</div>
+      <div class="lesson-title-card">Sức mạnh cam kết</div>
+      <div class="lesson-desc">Cảm xúc nhất thời không thắng cam kết. Người giỏi đi đều mỗi ngày, dù người thông minh thường không kiên trì.</div>
+      <div class="lesson-action">Làm việc quan trọng nhỏ. Duy trì mỗi ngày.</div>
+    </div>
+    <div class="lesson-card reveal reveal-delay-3">
+      <div class="lesson-num-bg">8</div>
+      <div class="lesson-n">08 / 10</div>
+      <div class="lesson-title-card">Vốn văn hóa</div>
+      <div class="lesson-desc">Vốn văn hóa là tài sản bền nhất, không mua được bằng tiền. Hiểu giá trị sâu, giá trị tự tìm đến.</div>
+      <div class="lesson-action">Đầu tư vào nghệ thuật, lịch sử, triết học.</div>
+    </div>
+    <div class="lesson-card reveal">
+      <div class="lesson-num-bg">9</div>
+      <div class="lesson-n">09 / 10</div>
+      <div class="lesson-title-card">Giáo dục đúng nghĩa</div>
+      <div class="lesson-desc">Giáo dục không phải thêm thông tin. Giáo dục là xây nền cho con người. Nhận thức càng dùng càng sinh lời.</div>
+      <div class="lesson-action">Cuối tháng: mình biết thêm điều gì?</div>
+    </div>
+    <div class="lesson-card reveal reveal-delay-1">
+      <div class="lesson-num-bg">10</div>
+      <div class="lesson-n">10 / 10</div>
+      <div class="lesson-title-card">Trưởng thành</div>
+      <div class="lesson-desc">Cuộc đời không hứa bình thản. Mục tiêu không phải tránh khó khăn, mà là đủ trưởng thành để vượt qua.</div>
+      <div class="lesson-action">Không trách môi trường. Đi qua và học từ thử thách.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CAU NOI -->
+<section class="section" style="background:var(--bg2)" id="cau-noi">
+  <div class="section-label"><span class="section-num">05</span> Câu Nói Đáng Nhớ</div>
+  <h2 class="big-heading reveal">Mười câu nói<br><em>đáng nhớ</em></h2>
+  <p class="reveal reveal-delay-1" style="color:var(--muted);font-size:14px;max-width:480px;margin-top:8px">Không để ghi nhớ, mà để suy nghĩ nhiều lần.</p>
+  <div class="quotes-masonry reveal reveal-delay-2">
+    <div class="quote-card">
+      <div class="qc-num">01</div>
+      <div class="qc-text">Thế giới này chưa bao giờ đào thải người có năng lực. Nó chỉ liên tục đào thải những cách làm lỗi thời.</div>
+      <div class="qc-author">Hoang Hai Yen</div>
+    </div>
+    <div class="quote-card">
+      <div class="qc-num">02</div>
+      <div class="qc-text">Khi ngôn ngữ thay đổi, tư duy thay đổi. Khi tư duy thay đổi, cơ hội thay đổi.</div>
+      <div class="qc-author">Hoang Hai Yen</div>
+    </div>
+    <div class="quote-card">
+      <div class="qc-num">03</div>
+      <div class="qc-text">Học không phải để biết nhiều hơn người khác, mà để nhìn cái vấn đề từ nhiều góc độ hơn.</div>
+      <div class="qc-author">Hoang Hai Yen</div>
+    </div>
+    <div class="quote-card">
+      <div class="qc-num">04</div>
+      <div class="qc-text">Cảm xúc nhất thời không bao giờ chiến thắng sự cam kết.</div>
+      <div class="qc-author">Hoang Hai Yen</div>
+    </div>
+    <div class="quote-card">
+      <div class="qc-num">05</div>
+      <div class="qc-text">Chất lượng cuộc sống cuối cùng chỉ là kết quả của những gì chúng ta hấp thụ mỗi ngày.</div>
+      <div class="qc-author">Hoang Hai Yen</div>
+    </div>
+    <div class="quote-card">
+      <div class="qc-num">06</div>
+      <div class="qc-text">Người có thể lặp đi lặp lại những việc nhàm chán đáng giá hơn cả thiên tài.</div>
+      <div class="qc-author">Hoang Hai Yen</div>
+    </div>
+    <div class="quote-card">
+      <div class="qc-num">07</div>
+      <div class="qc-text">Doanh nghiệp luôn phản chiếu phẩm cách của người lãnh đạo.</div>
+      <div class="qc-author">Hoang Hai Yen</div>
+    </div>
+    <div class="quote-card">
+      <div class="qc-num">08</div>
+      <div class="qc-text">Nhận thức là tài sản, càng sử dụng thì càng sinh lời, càng chia sẻ thì càng sâu sắc.</div>
+      <div class="qc-author">Hoang Hai Yen</div>
+    </div>
+    <div class="quote-card">
+      <div class="qc-num">09</div>
+      <div class="qc-text">People don't buy what you do. They buy why you do it.</div>
+      <div class="qc-author">Simon Sinek</div>
+    </div>
+    <div class="quote-card">
+      <div class="qc-num">10</div>
+      <div class="qc-text">Người muốn ở lại thì không cần giữ. Người muốn đi thì cũng không nên níu.</div>
+      <div class="qc-author">Hoang Hai Yen</div>
+    </div>
+  </div>
+</section>
+
+<!-- SECOND MARQUEE -->
+<div class="h-scroll-section">
+  <div class="h-scroll-track" style="animation-direction:reverse">
+    <div class="h-scroll-item">NHẬN THỨC <em>LÀ TÀI SẢN</em></div>
+    <div class="h-scroll-item">PEOPLE BUY <em>WHY</em></div>
+    <div class="h-scroll-item">CHIỀU SÂU <em>TƯ DUY</em></div>
+    <div class="h-scroll-item">CAM KẾT <em>LÀ NỀN TẢNG</em></div>
+    <div class="h-scroll-item">QUẢN TRỊ <em>DỮ LIỆU</em></div>
+    <div class="h-scroll-item">GOLDEN <em>CIRCLE</em></div>
+    <div class="h-scroll-item">NHẬN THỨC <em>LÀ TÀI SẢN</em></div>
+    <div class="h-scroll-item">PEOPLE BUY <em>WHY</em></div>
+    <div class="h-scroll-item">CHIỀU SÂU <em>TƯ DUY</em></div>
+    <div class="h-scroll-item">CAM KẾT <em>LÀ NỀN TẢNG</em></div>
+    <div class="h-scroll-item">QUẢN TRỊ <em>DỮ LIỆU</em></div>
+    <div class="h-scroll-item">GOLDEN <em>CIRCLE</em></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand">GIVE<em>HADA</em></div>
+      <div class="footer-sub">H2Y International Coaching &amp; Investment JSC</div>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:11px;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px">Mentor Foundation Program</div>
+      <div style="font-size:13px;color:var(--cream)">V1.0 · Biên Bản Tổng Hợp</div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 GIVEHADA. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="#">Tổng Quan</a>
+      <a href="#">Chủ Đề</a>
+      <a href="#">Framework</a>
+      <a href="#">Bài Học</a>
+      <a href="#">Câu Nói</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ─── CURSOR ───────────────────────────────
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e=>{
+  mx=e.clientX; my=e.clientY;
+  cursor.style.left=mx+'px'; cursor.style.top=my+'px';
+});
+(function animRing(){
+  rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
+  ring.style.left=rx+'px'; ring.style.top=ry+'px';
+  requestAnimationFrame(animRing);
+})();
+document.querySelectorAll('a,button,.topic-item,.lesson-card,.quote-card,.tang-card,.legend-row,.kpi-card,.sense-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{
+    cursor.style.transform='translate(-50%,-50%) scale(2.5)';
+    ring.style.width='60px'; ring.style.height='60px';
+    ring.style.borderColor='rgba(201,168,76,0.8)';
+  });
+  el.addEventListener('mouseleave',()=>{
+    cursor.style.transform='translate(-50%,-50%) scale(1)';
+    ring.style.width='36px'; ring.style.height='36px';
+    ring.style.borderColor='rgba(201,168,76,0.5)';
+  });
+});
+
+// ─── NAV SCROLL ───────────────────────────
+const nav = document.getElementById('nav');
+window.addEventListener('scroll',()=>{
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// ─── REVEAL ON SCROLL ─────────────────────
+const reveals = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); }
+  });
+},{threshold:0.12});
+reveals.forEach(el=>io.observe(el));
+
+// ─── COUNT-UP ─────────────────────────────
+function countUp(el){
+  const target=+el.getAttribute('data-target');
+  const suffix=el.getAttribute('data-suffix')||'';
+  let start=0;
+  const dur=1800;
+  const step=timestamp=>{
+    if(!start) start=timestamp;
+    const prog=Math.min((timestamp-start)/dur,1);
+    const ease=1-Math.pow(1-prog,4);
+    el.textContent=Math.round(ease*target)+suffix;
+    if(prog<1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+const countEls = document.querySelectorAll('.count-val[data-target]');
+const countIO = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){ countUp(e.target); countIO.unobserve(e.target); }
+  });
+},{threshold:0.5});
+countEls.forEach(el=>countIO.observe(el));
+
+// ─── PARALLAX SUBTLE ──────────────────────
+const hero = document.querySelector('.hero');
+window.addEventListener('scroll',()=>{
+  const y = window.scrollY;
+  if(hero) hero.style.backgroundPositionY = (y*0.3)+'px';
+  document.querySelectorAll('.hero-title-line').forEach((el,i)=>{
+    el.style.transform = `translateX(${y*(i%2===0?-0.02:0.02)}px)`;
+  });
+},{ passive:true });
+</script>
+</body>
+</html>

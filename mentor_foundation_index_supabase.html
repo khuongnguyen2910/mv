@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mentor Foundation® 2026 · GIVEHADA</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#08090b;
+  --bg2:#0d0f14;
+  --gold:#c9a84c;
+  --gold2:#e8c96a;
+  --cream:#f0ede6;
+  --muted:#6b6e7a;
+  --dim:#3a3d48;
+  --border:rgba(255,255,255,0.06);
+  --gold-border:rgba(201,168,76,0.25);
+}
+
+html,body{height:100%;margin:0;padding:0}
+body{
+  background:var(--bg);color:var(--cream);
+  font-family:'Inter',sans-serif;
+  -webkit-font-smoothing:antialiased;
+  overflow:hidden;
+  cursor:none;
+}
+
+/* ─── CURSOR ─────────────────────── */
+#cursor{
+  position:fixed;width:10px;height:10px;
+  background:var(--gold);border-radius:50%;
+  pointer-events:none;z-index:99999;
+  transition:transform 0.15s ease,opacity 0.3s;
+  transform:translate(-50%,-50%);
+}
+#cursor-ring{
+  position:fixed;width:36px;height:36px;
+  border:1px solid rgba(201,168,76,0.5);border-radius:50%;
+  pointer-events:none;z-index:99998;
+  transition:transform 0.4s ease,width 0.3s,height 0.3s;
+  transform:translate(-50%,-50%);
+}
+
+/* ─── SELECTOR SCREEN ─────────────── */
+#selector{
+  position:fixed;inset:0;z-index:100;
+  display:flex;flex-direction:column;
+  transition:opacity 0.5s ease,transform 0.5s ease;
+}
+#selector.exit{opacity:0;transform:translateY(-20px);pointer-events:none}
+
+/* background noise overlay */
+#selector::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 30%, rgba(201,168,76,0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 80% 70%, rgba(201,168,76,0.03) 0%, transparent 60%);
+  pointer-events:none;
+}
+
+/* Top bar */
+.sel-topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 48px;height:64px;
+  border-bottom:1px solid var(--border);
+  position:relative;z-index:1;
+  flex-shrink:0;
+}
+.sel-logo{
+  font-family:'Cormorant Garamond',serif;
+  font-size:16px;font-weight:700;letter-spacing:0.04em;
+  color:var(--cream);text-decoration:none;
+}
+.sel-logo em{color:var(--gold);font-style:normal}
+.sel-badge{
+  font-size:10px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;
+  color:var(--muted);border:1px solid var(--border);
+  padding:6px 16px;
+}
+.sel-topbar-right{display:flex;align-items:center;gap:12px}
+
+/* Main content */
+.sel-main{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:40px 48px;position:relative;z-index:1;
+  gap:0;
+}
+
+/* Program label */
+.sel-program-label{
+  font-size:10px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--gold);display:flex;align-items:center;gap:12px;
+  margin-bottom:24px;
+  opacity:0;animation:fadeUp 0.7s ease forwards 0.1s;
+}
+.sel-program-label::before{content:'';width:28px;height:1px;background:var(--gold)}
+.sel-program-label::after{content:'';width:28px;height:1px;background:var(--gold)}
+
+/* Main title */
+.sel-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(48px,7vw,100px);
+  font-weight:700;line-height:0.9;letter-spacing:-0.02em;
+  text-align:center;
+  margin-bottom:12px;
+  overflow:hidden;
+}
+.sel-title-line{
+  display:block;
+  opacity:0;transform:translateY(80%);
+  animation:slideUp 0.9s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+.sel-title-line:nth-child(1){animation-delay:0.2s}
+.sel-title-line:nth-child(2){color:var(--gold);font-style:italic;animation-delay:0.35s}
+
+.sel-subtitle{
+  font-size:13px;color:var(--muted);letter-spacing:0.06em;
+  text-align:center;margin-bottom:56px;
+  opacity:0;animation:fadeUp 0.7s ease forwards 0.6s;
+}
+
+/* Card grid */
+.sel-cards{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:1px;background:var(--border);
+  border:1px solid var(--border);
+  width:100%;max-width:900px;
+  opacity:0;animation:fadeUp 0.8s ease forwards 0.75s;
+}
+.sel-card{
+  background:var(--bg2);
+  padding:36px 40px;cursor:pointer;
+  position:relative;overflow:hidden;
+  transition:background 0.35s;
+  display:flex;flex-direction:column;gap:16px;
+}
+.sel-card::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(201,168,76,0.06) 0%,transparent 60%);
+  opacity:0;transition:opacity 0.35s;
+}
+.sel-card:hover{background:#10121a}
+.sel-card:hover::before{opacity:1}
+.sel-card:hover .sel-card-arrow{transform:translateX(6px);color:var(--gold)}
+.sel-card:hover .sel-card-session{color:var(--gold)}
+.sel-card:hover .sel-card-title{color:var(--gold2)}
+
+/* Left card - SS3 */
+.sel-card-ss3{border-right:none}
+
+/* session tag */
+.sel-card-session{
+  font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--muted);transition:color 0.3s;
+  display:flex;align-items:center;gap:10px;
+}
+.sel-card-session::before{content:'';width:16px;height:1px;background:currentColor}
+
+/* main title */
+.sel-card-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(28px,3.5vw,48px);font-weight:700;line-height:0.95;
+  color:var(--cream);transition:color 0.3s;letter-spacing:-0.01em;
+}
+.sel-card-title em{color:var(--gold);font-style:italic}
+
+/* topic pills */
+.sel-card-topics{
+  font-size:12px;color:var(--muted);line-height:1.65;
+}
+
+/* meta info */
+.sel-card-meta{
+  display:flex;gap:20px;
+  padding-top:16px;border-top:1px solid var(--border);
+  margin-top:auto;
+}
+.sel-card-meta-item{
+  font-size:10px;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--dim);
+}
+.sel-card-meta-val{
+  font-family:'Cormorant Garamond',serif;
+  font-size:22px;font-weight:700;
+  color:var(--gold);display:block;line-height:1;
+  margin-bottom:2px;
+}
+
+/* arrow */
+.sel-card-arrow{
+  font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--muted);transition:transform 0.3s,color 0.3s;
+  display:flex;align-items:center;gap:8px;
+  margin-top:4px;
+}
+.sel-card-arrow::after{content:'→'}
+
+/* bottom bar */
+.sel-footer{
+  padding:0 48px;height:48px;
+  display:flex;align-items:center;justify-content:center;
+  border-top:1px solid var(--border);
+  flex-shrink:0;position:relative;z-index:1;
+  opacity:0;animation:fadeUp 0.7s ease forwards 1s;
+}
+.sel-footer-txt{
+  font-size:10px;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--dim);
+}
+.sel-footer-txt em{color:var(--gold);font-style:normal}
+
+/* ─── VIEWER SCREEN ───────────────── */
+#viewer{
+  position:fixed;inset:0;z-index:200;
+  display:flex;flex-direction:column;
+  opacity:0;transform:translateY(24px);
+  pointer-events:none;
+  transition:opacity 0.45s ease,transform 0.45s ease;
+}
+#viewer.active{opacity:1;transform:translateY(0);pointer-events:all}
+
+/* viewer bar */
+.viewer-bar{
+  display:flex;align-items:center;gap:0;
+  height:52px;flex-shrink:0;
+  background:rgba(8,9,11,0.96);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  z-index:1;
+}
+.viewer-bar-logo{
+  padding:0 28px;border-right:1px solid var(--border);height:100%;
+  display:flex;align-items:center;
+  font-family:'Cormorant Garamond',serif;
+  font-size:14px;font-weight:700;letter-spacing:0.04em;
+  color:var(--cream);text-decoration:none;flex-shrink:0;
+}
+.viewer-bar-logo em{color:var(--gold);font-style:normal}
+.viewer-back{
+  padding:0 24px;height:100%;
+  display:flex;align-items:center;gap:10px;
+  font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--muted);cursor:pointer;border:none;background:none;
+  border-right:1px solid var(--border);transition:color 0.2s;flex-shrink:0;
+}
+.viewer-back:hover{color:var(--cream)}
+.viewer-back::before{content:'←';font-size:14px;color:var(--gold)}
+.viewer-session-label{
+  padding:0 24px;
+  font-size:10px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--dim);
+}
+.viewer-session-label em{color:var(--gold);font-style:normal}
+
+/* iframe */
+.viewer-frame{
+  flex:1;border:none;width:100%;
+  background:var(--bg);
+}
+
+/* ─── KEYFRAMES ───────────────────── */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes slideUp{
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ─── MOBILE ──────────────────────── */
+@media(max-width:768px){
+  body{cursor:auto}
+  #cursor,#cursor-ring{display:none}
+  .sel-topbar{padding:0 20px;height:54px}
+  .sel-main{padding:28px 20px}
+  .sel-title{font-size:clamp(40px,12vw,72px)}
+  .sel-cards{grid-template-columns:1fr;max-width:100%}
+  .sel-card{padding:28px 24px}
+  .sel-card-ss3{border-right:1px solid var(--border)}
+  .sel-footer{padding:0 20px}
+  .viewer-bar-logo{padding:0 16px}
+  .viewer-back{padding:0 16px}
+  .viewer-session-label{display:none}
+}
+
+/* ═══ AUTH GATE ═══════════════════════════ */
+#auth-gate{
+  position:fixed;inset:0;z-index:9999;
+  background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity .6s ease, visibility .6s ease;
+}
+#auth-gate.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.auth-box{width:100%;max-width:380px;padding:0 32px;text-align:center}
+.auth-logo{
+  font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;
+  letter-spacing:0.04em;color:var(--cream);margin-bottom:8px;
+}
+.auth-logo em{color:var(--gold);font-style:italic}
+.auth-tagline{
+  font-size:10px;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:44px;
+}
+.auth-title{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:clamp(28px,6vw,36px);font-weight:600;
+  color:var(--cream);margin-bottom:36px;
+}
+.auth-field{margin-bottom:18px;text-align:left}
+.auth-field label{
+  display:block;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:8px;
+}
+.auth-field input{
+  width:100%;padding:13px 16px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border);
+  color:var(--cream);font-family:'Inter',sans-serif;font-size:14px;
+  outline:none;transition:border-color .3s;cursor:auto;
+}
+.auth-field input:focus{border-color:var(--gold-border)}
+.auth-submit{
+  width:100%;margin-top:10px;padding:14px;
+  background:var(--gold);color:var(--bg);
+  border:none;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;
+  letter-spacing:0.14em;text-transform:uppercase;
+  cursor:pointer;transition:background .3s;
+}
+.auth-submit:hover{background:var(--gold2)}
+.auth-error{margin-top:16px;font-size:12px;color:#c8834a;min-height:16px}
+
+
+.auth-toggle{margin-top:24px;font-size:12px;color:var(--muted)}
+.auth-toggle a{color:var(--gold);text-decoration:none;margin-left:6px;border-bottom:1px solid var(--gold-border)}
+.auth-toggle a:hover{color:var(--gold2)}
+.auth-loading{
+  position:fixed;inset:0;z-index:9998;background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Inter',sans-serif;font-size:11px;letter-spacing:0.15em;
+  text-transform:uppercase;color:var(--muted);
+}
+.auth-logout{
+  font-family:'Inter',sans-serif;font-size:10px;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--muted);text-decoration:none;
+  cursor:pointer;border:1px solid var(--border);padding:8px 14px;
+  transition:color .3s,border-color .3s;
+}
+.auth-logout:hover{color:var(--gold);border-color:var(--gold-border)}
+
+</style>
+</head>
+<body>
+<div id="auth-gate">
+  <div class="auth-box">
+    <div class="auth-logo">GIVE<em>HADA</em></div>
+    <div class="auth-tagline">Tài Liệu Nội Bộ · 2026</div>
+    <div class="auth-title" id="auth-mode-title">Đăng Nhập</div>
+    <form id="auth-form" autocomplete="off">
+      <div class="auth-field">
+        <label>Email</label>
+        <input type="email" id="auth-email" autocomplete="off" required>
+      </div>
+      <div class="auth-field">
+        <label>Mật Khẩu</label>
+        <input type="password" id="auth-pass" autocomplete="off" required minlength="6">
+      </div>
+      <button type="submit" class="auth-submit" id="auth-submit-btn">Đăng Nhập</button>
+      <div class="auth-error" id="auth-error"></div>
+    </form>
+    <div class="auth-toggle">
+      <span id="auth-toggle-text">Chưa có tài khoản?</span><a href="#" id="auth-toggle-link">Đăng Ký</a>
+    </div>
+  </div>
+</div>
+<div class="auth-loading" id="auth-loading">Đang Kiểm Tra Phiên Đăng Nhập...</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+  // ─── CẤU HÌNH SUPABASE ─────────────────────────────
+  // Thay 2 giá trị dưới bằng URL và anon key của dự án Supabase của bạn.
+  // Lấy tại: Supabase Dashboard > Project Settings > API
+  var SUPABASE_URL = 'https://YOUR-PROJECT.supabase.co';
+  var SUPABASE_ANON_KEY = 'YOUR-ANON-PUBLIC-KEY';
+
+  var gate     = document.getElementById('auth-gate');
+  var loading  = document.getElementById('auth-loading');
+  var form     = document.getElementById('auth-form');
+  var err      = document.getElementById('auth-error');
+  var emailEl  = document.getElementById('auth-email');
+  var passEl   = document.getElementById('auth-pass');
+  var submitBtn= document.getElementById('auth-submit-btn');
+  var modeTitle= document.getElementById('auth-mode-title');
+  var toggleTxt= document.getElementById('auth-toggle-text');
+  var toggleLnk= document.getElementById('auth-toggle-link');
+  var mode = 'login';
+
+  if(SUPABASE_URL.indexOf('YOUR-PROJECT') > -1){
+    loading.innerHTML = 'Chưa cấu hình Supabase.<br><br>Điền SUPABASE_URL và SUPABASE_ANON_KEY trong file HTML.';
+    loading.style.flexDirection='column';loading.style.gap='8px';loading.style.textAlign='center';loading.style.padding='40px';
+    return;
+  }
+
+  var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  window.__sb = sb; // cho phép gọi đăng xuất từ bên ngoài nếu cần
+
+  function showApp(){
+    loading.style.display='none';
+    gate.classList.add('hidden');
+    document.body.style.overflow='';
+  }
+  function showGate(){
+    loading.style.display='none';
+    gate.classList.remove('hidden');
+    document.body.style.overflow='hidden';
+  }
+
+  sb.auth.getSession().then(function(res){
+    if(res.data.session){ showApp(); } else { showGate(); }
+  });
+
+  sb.auth.onAuthStateChange(function(event, session){
+    if(session){ showApp(); } else { showGate(); }
+  });
+
+  toggleLnk.addEventListener('click', function(e){
+    e.preventDefault();
+    err.textContent='';
+    if(mode==='login'){
+      mode='signup';
+      modeTitle.textContent='Đăng Ký';
+      submitBtn.textContent='Tạo Tài Khoản';
+      toggleTxt.textContent='Đã có tài khoản?';
+      toggleLnk.textContent='Đăng Nhập';
+    } else {
+      mode='login';
+      modeTitle.textContent='Đăng Nhập';
+      submitBtn.textContent='Đăng Nhập';
+      toggleTxt.textContent='Chưa có tài khoản?';
+      toggleLnk.textContent='Đăng Ký';
+    }
+  });
+
+  function translateError(msg){
+    if(msg.indexOf('Invalid login credentials')>-1) return 'Sai email hoặc mật khẩu.';
+    if(msg.indexOf('already registered')>-1 || msg.indexOf('already exists')>-1) return 'Email đã được đăng ký.';
+    if(msg.indexOf('Password should be')>-1) return 'Mật khẩu cần ít nhất 6 ký tự.';
+    if(msg.indexOf('rate limit')>-1) return 'Thử lại sau ít phút.';
+    return msg;
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    err.style.color='#c8834a';
+    err.textContent='';
+    submitBtn.disabled=true;
+    submitBtn.textContent='Đang Xử Lý...';
+
+    var email = emailEl.value.trim();
+    var pass  = passEl.value;
+    var action = mode==='login'
+      ? sb.auth.signInWithPassword({ email: email, password: pass })
+      : sb.auth.signUp({ email: email, password: pass });
+
+    action.then(function(res){
+      submitBtn.disabled=false;
+      submitBtn.textContent = mode==='login' ? 'Đăng Nhập' : 'Tạo Tài Khoản';
+      if(res.error){
+        err.textContent = translateError(res.error.message);
+      } else if(mode==='signup' && !res.data.session){
+        err.style.color='var(--gold)';
+        err.textContent='Kiểm tra email để xác nhận tài khoản trước khi đăng nhập.';
+      }
+    });
+  });
+
+  // Hàm đăng xuất, gắn vào nút .auth-logout nếu có trên trang
+  document.querySelectorAll('.auth-logout').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.preventDefault();
+      sb.auth.signOut();
+    });
+  });
+})();
+</script>
+
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- ═══ SELECTOR SCREEN ═══════════════════════════ -->
+<div id="selector">
+  <!-- Top bar -->
+  <div class="sel-topbar">
+    <a href="#" class="sel-logo">GIVE<em>HADA</em></a>
+    <div class="sel-topbar-right">
+      <div class="sel-badge">Tài Liệu Nội Bộ · 2026</div>
+      <a href="#" class="auth-logout">Đăng Xuất</a>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="sel-main">
+    <div class="sel-program-label">Mentor Foundation® 2026</div>
+    <div class="sel-title">
+      <span class="sel-title-line">Chọn</span>
+      <span class="sel-title-line">Buổi Học.</span>
+    </div>
+    <p class="sel-subtitle">Biên bản tổng hợp nội bộ · GIVEHADA / H2Y International JSC</p>
+
+    <div class="sel-cards">
+      <!-- SS3 -->
+      <div class="sel-card sel-card-ss3" onclick="openSession('ss3')" id="card-ss3">
+        <div class="sel-card-session">Session 03</div>
+        <div class="sel-card-title">Tư Duy<br><em>Kinh Doanh</em><br>Bền Vững.</div>
+        <div class="sel-card-topics">Dịch Vụ Khách Hàng · Quản Trị Con Người · Tăng Trưởng Dài Hạn · Chu Kỳ Doanh Nghiệp</div>
+        <div class="sel-card-meta">
+          <div class="sel-card-meta-item">
+            <span class="sel-card-meta-val">8</span>Chủ Đề
+          </div>
+          <div class="sel-card-meta-item">
+            <span class="sel-card-meta-val">4</span>Tầng CS/CRM
+          </div>
+          <div class="sel-card-meta-item">
+            <span class="sel-card-meta-val">8</span>Câu Nói
+          </div>
+        </div>
+        <div class="sel-card-arrow">Mở buổi học</div>
+      </div>
+
+      <!-- SS4 -->
+      <div class="sel-card sel-card-ss4" onclick="openSession('ss4')" id="card-ss4">
+        <div class="sel-card-session">Session 04</div>
+        <div class="sel-card-title">Nhận Thức<br><em>&amp; Lãnh Đạo.</em></div>
+        <div class="sel-card-topics">Xu Thế Toàn Cầu · Cam Kết · Ngôn Thức · Golden Circle · Quản Lý Quan Hệ</div>
+        <div class="sel-card-meta">
+          <div class="sel-card-meta-item">
+            <span class="sel-card-meta-val">6</span>Chủ Đề
+          </div>
+          <div class="sel-card-meta-item">
+            <span class="sel-card-meta-val">10</span>Bài Học
+          </div>
+          <div class="sel-card-meta-item">
+            <span class="sel-card-meta-val">10</span>Câu Nói
+          </div>
+        </div>
+        <div class="sel-card-arrow">Mở buổi học</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="sel-footer">
+    <div class="sel-footer-txt">© 2026 <em>GIVEHADA</em> · H2Y International Coaching &amp; Investment JSC · Tài Liệu Nội Bộ</div>
+  </div>
+</div>
+
+<!-- ═══ VIEWER SCREEN ════════════════════════════= -->
+<div id="viewer">
+  <div class="viewer-bar">
+    <a href="#" class="viewer-bar-logo">GIVE<em>HADA</em></a>
+    <button class="viewer-back" onclick="closeSession()">Chọn Buổi Học</button>
+    <div class="viewer-session-label" id="viewer-label">—</div>
+  </div>
+  <iframe class="viewer-frame" id="viewer-frame" src="" frameborder="0" allowfullscreen></iframe>
+</div>
+
+<script>
+// ─── CURSOR ───────────────────────────────────────
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX;my=e.clientY;
+  cursor.style.left=mx+'px';cursor.style.top=my+'px';
+});
+(function animRing(){
+  rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;
+  ring.style.left=rx+'px';ring.style.top=ry+'px';
+  requestAnimationFrame(animRing);
+})();
+document.querySelectorAll('.sel-card,.viewer-back').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{
+    cursor.style.transform='translate(-50%,-50%) scale(2.5)';
+    ring.style.width='60px';ring.style.height='60px';
+    ring.style.borderColor='rgba(201,168,76,0.8)';
+  });
+  el.addEventListener('mouseleave',()=>{
+    cursor.style.transform='translate(-50%,-50%) scale(1)';
+    ring.style.width='36px';ring.style.height='36px';
+    ring.style.borderColor='rgba(201,168,76,0.5)';
+  });
+});
+
+// ─── SESSION MANAGEMENT ───────────────────────────
+const selector  = document.getElementById('selector');
+const viewer    = document.getElementById('viewer');
+const frame     = document.getElementById('viewer-frame');
+const label     = document.getElementById('viewer-label');
+
+const sessions = {
+  ss3:{
+    file:'mentor_foundation_ss3_supabase.html',
+    label:'<em>SS3</em> · Tư Duy Kinh Doanh Bền Vững',
+  },
+  ss4:{
+    file:'mentor_foundation_ss4_supabase.html',
+    label:'<em>SS4</em> · Nhận Thức &amp; Lãnh Đạo',
+  }
+};
+
+function openSession(key){
+  const s = sessions[key];
+
+  // Start loading the iframe immediately
+  frame.src = s.file;
+  label.innerHTML = s.label;
+
+  // Animate selector out
+  selector.classList.add('exit');
+
+  // Show viewer
+  setTimeout(()=>{
+    selector.style.display='none';
+    viewer.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }, 450);
+}
+
+function closeSession(){
+  // Animate viewer out
+  viewer.classList.remove('active');
+
+  setTimeout(()=>{
+    selector.style.display='flex';
+    selector.classList.remove('exit');
+    // reset iframe after exit so it doesn't briefly show
+    setTimeout(()=>{ frame.src=''; },200);
+  }, 460);
+}
+
+// Allow ESC to close
+document.addEventListener('keydown', e=>{
+  if(e.key==='Escape' && viewer.classList.contains('active')) closeSession();
+});
+</script>
+</body>
+</html>
