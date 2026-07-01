@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE STANDARD — Intro</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;900&family=Jost:wght@300;400;500&display=swap');
+
+  :root{
+    --bg: #0a0a0a;
+    --ivory: #f5f1ea;
+    --brass: #c9a662;
+    --brass-dim: rgba(201,166,98,0.35);
+    --dur-in: 1.1s;
+    --dur-split: 0.9s;
+    --dur-sub: 0.9s;
+    --dur-merge: 0.8s;
+    --ease: cubic-bezier(.65,.05,.15,1);
+  }
+
+  *{ box-sizing: border-box; }
+  html,body{ margin:0; padding:0; }
+
+  body{
+    background: var(--bg);
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    font-family: 'Jost', sans-serif;
+  }
+
+  .stage{
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* subtle grain texture for premium feel */
+  .grain{
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    z-index: 5;
+  }
+
+  .headline-wrap{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+
+  /* top and bottom halves are separate clipped copies of the same text,
+     so we can slide them apart to reveal the subline */
+  .half{
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    will-change: transform;
+  }
+
+  .half.top{ height: 0.62em; align-items: flex-end; }
+  .half.bottom{ height: 0.62em; align-items: flex-start; margin-top: -0.02em; }
+
+  .headline{
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: clamp(2.6rem, 11vw, 9.5rem);
+    line-height: 1;
+    color: var(--ivory);
+    letter-spacing: 0.14em;
+    white-space: nowrap;
+    opacity: 0;
+    text-shadow: 0 0 0 rgba(201,166,98,0);
+    transition:
+      opacity var(--dur-in) var(--ease),
+      letter-spacing var(--dur-in) var(--ease),
+      text-shadow 1.4s ease;
+  }
+
+  .half.top .headline{ transform: translateY(0); }
+  .half.bottom .headline{ transform: translateY(-1em); }
+
+  body.reveal .headline{
+    opacity: 1;
+    letter-spacing: 0.03em;
+  }
+
+  body.glow .headline{
+    text-shadow: 0 0 26px var(--brass-dim);
+  }
+
+  body.split .half.top{
+    transform: translateY(-0.58em);
+    transition: transform var(--dur-split) var(--ease);
+  }
+  body.split .half.bottom{
+    transform: translateY(0.58em);
+    transition: transform var(--dur-split) var(--ease);
+  }
+
+  body.merge .half.top{
+    transform: translateY(0);
+    transition: transform var(--dur-merge) var(--ease);
+  }
+  body.merge .half.bottom{
+    transform: translateY(0);
+    transition: transform var(--dur-merge) var(--ease);
+  }
+
+  .subline{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    font-size: clamp(0.68rem, 1.5vw, 1.05rem);
+    letter-spacing: 0.32em;
+    color: var(--brass);
+    text-transform: uppercase;
+    opacity: 0;
+    white-space: nowrap;
+    transition: opacity var(--dur-sub) var(--ease), transform var(--dur-sub) var(--ease);
+  }
+
+  body.sub-in .subline{
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+
+  body.sub-in .subline{ transform: translate(-50%, -50%) translateY(0); }
+  .subline{ transform: translate(-50%, -50%) translateY(14px); }
+
+  body.sub-out .subline{
+    opacity: 0.85;
+    font-size: clamp(0.5rem, 1vw, 0.72rem);
+    letter-spacing: 0.28em;
+    top: calc(50% + clamp(2.2rem, 7vw, 6rem));
+    transition: all var(--dur-merge) var(--ease);
+  }
+
+  body.exit .headline-wrap{
+    opacity: 0;
+    transform: translateY(-24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .skip{
+    position: absolute;
+    bottom: 28px;
+    right: 32px;
+    z-index: 10;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(245,241,234,0.4);
+    background: none;
+    border: 1px solid rgba(245,241,234,0.2);
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: color 0.3s ease, border-color 0.3s ease;
+  }
+  .skip:hover{
+    color: var(--ivory);
+    border-color: var(--brass);
+  }
+
+  .content{
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.8s ease;
+  }
+  body.show-content .content{
+    opacity: 1;
+    pointer-events: auto;
+  }
+  body.show-content .stage{
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+  }
+
+  .content-inner{
+    text-align: center;
+    color: var(--ivory);
+    font-family: 'Jost', sans-serif;
+  }
+  .content-inner .kicker{
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    font-size: clamp(1.4rem, 3vw, 2.2rem);
+    letter-spacing: 0.06em;
+    margin-bottom: 12px;
+  }
+  .content-inner .desc{
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    color: rgba(245,241,234,0.55);
+    text-transform: uppercase;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .headline, .half.top, .half.bottom, .subline, .headline-wrap, .content{
+      transition: opacity 0.3s ease !important;
+      transform: none !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <div class="stage">
+    <div class="grain"></div>
+    <div class="headline-wrap">
+      <div class="half top"><div class="headline">THE STANDARD</div></div>
+      <div class="subline">Chuẩn của cái đẹp · Chuẩn của người làm nghề</div>
+      <div class="half bottom"><div class="headline">THE STANDARD</div></div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="content-inner">
+      <div class="kicker">Nội dung chính bắt đầu ở đây</div>
+      <div class="desc">Placeholder — thay bằng phần nội dung thật của video</div>
+    </div>
+  </div>
+
+  <button class="skip" id="skipBtn">Bỏ qua ⌄</button>
+
+  <script>
+    const body = document.body;
+
+    function timeline(){
+      // 0.0s -> 0.8s : hold on black (nothing to trigger)
+      // 0.8s -> reveal headline
+      setTimeout(() => body.classList.add('reveal'), 800);
+
+      // subtle brass glow settles in as it fully appears
+      setTimeout(() => body.classList.add('glow'), 1700);
+
+      // 1.9s -> beat, then split
+      setTimeout(() => body.classList.add('split'), 1900);
+
+      // subline fades in inside the gap, slightly after split starts
+      setTimeout(() => body.classList.add('sub-in'), 2500);
+
+      // 3.6s -> begin merge back + subline drops to kicker position
+      setTimeout(() => {
+        body.classList.remove('split');
+        body.classList.add('merge');
+        body.classList.add('sub-out');
+      }, 3600);
+
+      // 4.3s -> exit whole headline group, reveal content
+      setTimeout(() => {
+        body.classList.add('exit');
+      }, 4300);
+
+      setTimeout(() => {
+        body.classList.add('show-content');
+      }, 4900);
+    }
+
+    document.getElementById('skipBtn').addEventListener('click', () => {
+      body.classList.add('show-content');
+    });
+
+    window.addEventListener('load', timeline);
+  </script>
+
+</body>
+</html>
